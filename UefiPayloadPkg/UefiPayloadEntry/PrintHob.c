@@ -97,7 +97,7 @@ PrintHex (
 
   StartAddr = DataStart;
   for (Index1 = 0; Index1 * ROW_LIMITER < DataSize; Index1++) {
-    DEBUG ((DEBUG_VERBOSE, "   0x%04p:",(DataStart - StartAddr)));
+    DEBUG ((DEBUG_VERBOSE, "   0x%04p:", (DataStart - StartAddr)));
     for (Index2 = 0; (Index2 < ROW_LIMITER) && (Index1 * ROW_LIMITER + Index2 < DataSize); Index2++){
       DEBUG ((DEBUG_VERBOSE, " %02x", *DataStart));
       DataStart++;
@@ -194,7 +194,7 @@ PrintResourceDiscriptorHob (
 
   DEBUG ((DEBUG_INFO, "   ResourceType      = %a\n", mResource_Type_List[Hob.ResourceDescriptor->ResourceType]));
   if(!IsZeroGuid (&Hob.ResourceDescriptor->Owner)) {
-    DEBUG ((DEBUG_INFO, "   Owner             = %g\n", Hob.ResourceDescriptor->Owner));
+    DEBUG ((DEBUG_INFO, " Owner             = %g\n", Hob.ResourceDescriptor->Owner));
   }
   DEBUG ((DEBUG_INFO, "   ResourceAttribute = 0x%x\n",  Hob.ResourceDescriptor->ResourceAttribute));
   DEBUG ((DEBUG_INFO, "   PhysicalStart     = 0x%lx\n", Hob.ResourceDescriptor->PhysicalStart));
@@ -308,7 +308,7 @@ PrintAcpiBoardInfoGuidHob (
 {
   ACPI_BOARD_INFO          *AcpBoardInfo;
   AcpBoardInfo = (ACPI_BOARD_INFO *) GET_GUID_HOB_DATA (HobRaw);
-  ASSERT (Hobsize >= sizeof(*AcpBoardInfo));
+  ASSERT (Hobsize >= sizeof (*AcpBoardInfo));
   DEBUG ((DEBUG_INFO, "   Revision        = 0x%x\n",  AcpBoardInfo->Revision));
   DEBUG ((DEBUG_INFO, "   Reserved0       = 0x%x\n",  AcpBoardInfo->Reserved0));
   DEBUG ((DEBUG_INFO, "   ResetValue      = 0x%x\n",  AcpBoardInfo->ResetValue));
@@ -339,7 +339,7 @@ PrintPciRootBridgeInfoGuidHob (
   UINTN                              Index;
   Index = 0;
   PciRootBridges = (UNIVERSAL_PAYLOAD_PCI_ROOT_BRIDGES *) GET_GUID_HOB_DATA (HobRaw);
-  ASSERT (Hobsize >= sizeof(UNIVERSAL_PAYLOAD_PCI_ROOT_BRIDGES));
+  ASSERT (Hobsize >= sizeof (UNIVERSAL_PAYLOAD_PCI_ROOT_BRIDGES));
   DEBUG ((DEBUG_INFO, "   Revision         = 0x%x\n", PciRootBridges->Header.Revision));
   DEBUG ((DEBUG_INFO, "   Length           = 0x%x\n", PciRootBridges->Header.Length));
   DEBUG ((DEBUG_INFO, "   Count            = 0x%x\n", PciRootBridges->Count));
@@ -424,7 +424,7 @@ PrintMemoryTypeInfoGuidHob (
   EFI_MEMORY_TYPE_INFORMATION *MemoryTypeInfo;
 
   MemoryTypeInfo = (EFI_MEMORY_TYPE_INFORMATION *) GET_GUID_HOB_DATA (HobRaw);
-  ASSERT (Hobsize >= sizeof(*MemoryTypeInfo));
+  ASSERT (Hobsize >= sizeof (*MemoryTypeInfo));
   DEBUG ((DEBUG_INFO, "   Type            = 0x%x\n", MemoryTypeInfo->Type));
   DEBUG ((DEBUG_INFO, "   NumberOfPages   = 0x%x\n", MemoryTypeInfo->NumberOfPages));
   return EFI_SUCCESS;
@@ -456,7 +456,7 @@ GUID_HOB_PRINT_HANDLE GuidHobPrintHandleTable[] = {
 EFI_STATUS
 PrintGuidHob (
   IN  VOID          *HobStart,
-  IN  UINT16          Hobsize
+  IN  UINT16        Hobsize
   )
 {
   EFI_PEI_HOB_POINTERS  Hob;
@@ -464,12 +464,12 @@ PrintGuidHob (
   EFI_STATUS            Status;
 
   Hob.Raw = (UINT8 *) HobStart;
-  ASSERT (Hobsize >= sizeof(Hob.Guid));
+  ASSERT (Hobsize >= sizeof (Hob.Guid));
 
   for (Index = 0; Index < ARRAY_SIZE (GuidHobPrintHandleTable); Index++) {
     if (CompareGuid (&Hob.Guid->Name, GuidHobPrintHandleTable[Index].Guid)) {
       DEBUG ((DEBUG_INFO, "   Guid   = %a\n", GuidHobPrintHandleTable[Index].GuidName));
-      Status = GuidHobPrintHandleTable[Index].PrintHandler (Hob.Raw,Hob.Header->HobLength);
+      Status = GuidHobPrintHandleTable[Index].PrintHandler (Hob.Raw, Hob.Header->HobLength);
       return Status;
     }
   }
